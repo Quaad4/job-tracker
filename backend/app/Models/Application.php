@@ -15,4 +15,9 @@ class Application extends Model
         'notes',
         'salary_min'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
