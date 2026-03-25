@@ -12,4 +12,21 @@ class ApplicationController extends Controller
     {
         return Application::all();
     }
+
+    public function store(Request $request) 
+    {
+
+        $validated = $request->validate([
+            'company' => 'required|string|max:255',
+            'role' => 'required|string|max:255',
+            'status' => 'required|in:applied,interview,offer,rejected',
+            'date_applied' => 'required|date',
+            'notes' => 'nullable|string',
+            'salary_min' => 'nullable|integer',
+        ]);
+
+        $application = Application::create([...$validated, 'user_id' => 1]);
+
+        return response()->json($application, 201);
+    }
 }
