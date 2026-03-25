@@ -11,9 +11,9 @@ class Application extends Model
         'company',
         'role',
         'status',
-        'data_applied',
+        'date_applied',
         'notes',
-        'salary_min'
+        'salary_min',
     ];
 
     public function user()
