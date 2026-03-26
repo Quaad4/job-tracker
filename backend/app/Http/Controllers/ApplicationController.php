@@ -50,4 +50,11 @@ class ApplicationController extends Controller
 
         return response()->json($application, 200);
     }
+
+    public function destroy(Application $application) 
+    {
+        $application->delete();
+
+        return response()->noContent();
+    }
 }
