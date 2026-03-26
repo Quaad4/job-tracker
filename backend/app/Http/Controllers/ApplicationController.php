@@ -29,4 +29,9 @@ class ApplicationController extends Controller
 
         return response()->json($application, 201);
     }
+
+    public function show(Application $application) 
+    {
+        return response()->json($application);
+    }
 }
