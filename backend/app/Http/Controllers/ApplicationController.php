@@ -34,4 +34,20 @@ class ApplicationController extends Controller
     {
         return response()->json($application);
     }
+
+    public function update(Request $request, Application $application) 
+    {
+        $validated = $request->validate([
+            'company' => 'required|string|max:255',
+            'role' => 'required|string|max:255',
+            'status' => 'required|in:applied,interview,offer,rejected',
+            'date_applied' => 'required|date',
+            'notes' => 'nullable|string',
+            'salary_min' => 'nullable|integer',
+        ]);
+
+        $application->update($validated);
+
+        return response()->json($application, 200);
+    }
 }
