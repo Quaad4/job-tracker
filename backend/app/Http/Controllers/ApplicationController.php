@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreApplicationRequest;
+use App\Http\Requests\UpdateApplicationRequest;
 use App\Models\Application;
-use Illuminate\Http\Request;
 
 class ApplicationController extends Controller
 {
@@ -13,19 +14,9 @@ class ApplicationController extends Controller
         return Application::all();
     }
 
-    public function store(Request $request) 
+    public function store(StoreApplicationRequest $request) 
     {
-
-        $validated = $request->validate([
-            'company' => 'required|string|max:255',
-            'role' => 'required|string|max:255',
-            'status' => 'required|in:applied,interview,offer,rejected',
-            'date_applied' => 'required|date',
-            'notes' => 'nullable|string',
-            'salary_min' => 'nullable|integer',
-        ]);
-
-        $application = Application::create([...$validated, 'user_id' => 1]);
+        $application = Application::create([...$request->validated(), 'user_id' => 1]);
 
         return response()->json($application, 201);
     }
@@ -35,18 +26,9 @@ class ApplicationController extends Controller
         return response()->json($application);
     }
 
-    public function update(Request $request, Application $application) 
+    public function update(UpdateApplicationRequest $request, Application $application) 
     {
-        $validated = $request->validate([
-            'company' => 'required|string|max:255',
-            'role' => 'required|string|max:255',
-            'status' => 'required|in:applied,interview,offer,rejected',
-            'date_applied' => 'required|date',
-            'notes' => 'nullable|string',
-            'salary_min' => 'nullable|integer',
-        ]);
-
-        $application->update($validated);
+        $application->update($request->validated());
 
         return response()->json($application, 200);
     }
