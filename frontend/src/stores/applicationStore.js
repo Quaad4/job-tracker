@@ -21,10 +21,15 @@ export const useApplicationStore = defineStore('applications', () => {
         }
     }
 
+    const getApplicationById = (id) => {
+        return applications.value.find(app => app.id === id)
+    }
+
     return {
         applications,
         loading,
         error,
         fetchApplications,
+        getApplicationById,
     }
 })
