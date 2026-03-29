@@ -1,8 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import ApplicationsView from '../views/ApplicationsView.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [],
+    history: createWebHistory(),
+    routes: [
+        {
+            path: '/',
+            name: 'applications',
+            component: ApplicationsView,
+        },
+    ],
 })
 
 export default router
