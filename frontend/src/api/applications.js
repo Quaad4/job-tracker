@@ -4,6 +4,8 @@ export const getApplications = (params = {}) => {
     return apiClient.get('/applications', { params })
 }
 
+// Available for direct API fetching if needed
+// Currently handled locally via getApplicationById in the store
 export const showApplication = (id) => {
     return apiClient.get(`/applications/${id}`)
 }
