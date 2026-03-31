@@ -1,7 +1,7 @@
 import apiClient from './axios'
 
-export const getApplications = () => {
-    return apiClient.get('/applications')
+export const getApplications = (params = {}) => {
+    return apiClient.get('/applications', { params })
 }
 
 export const showApplication = (id) => {
