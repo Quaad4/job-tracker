@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { getApplications, storeApplication } from '../api/applications'
+import { getApplications, storeApplication, updateApplication } from '../api/applications'
 
 export const useApplicationStore = defineStore('applications', () => {
 
@@ -33,6 +33,20 @@ export const useApplicationStore = defineStore('applications', () => {
         }
     }
 
+    const editApplication = async (id, data) => {
+        loading.value = true
+        try{
+            const response = await updateApplication(id, data)
+            applications.value = applications.value.map(app => {
+                return app.id === id ? response.data : app
+            })
+        } catch (err) {
+            console.log(err)
+        } finally {
+            loading.value = false
+        }
+    }
+
     const getApplicationById = (id) => {
         return applications.value.find(app => app.id === id)
     }
@@ -43,6 +57,7 @@ export const useApplicationStore = defineStore('applications', () => {
         error,
         fetchApplications,
         getApplicationById,
-        createApplication
+        createApplication,
+        editApplication,
     }
 })
