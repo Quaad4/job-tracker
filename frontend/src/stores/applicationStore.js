@@ -7,13 +7,33 @@ export const useApplicationStore = defineStore('applications', () => {
     const applications = ref([])
     const loading = ref(false)
     const error = ref(null)
+    const filters = ref({
+        status: null,
+    })
+    const pagination = ref({
+        currentPage: 1,
+        lastPage: 1,
+        total: 0,
+        perPage: 10,
+    })
 
     const fetchApplications = async () => {
 
         loading.value = true
         try {            
-            const response = await getApplications()
+            const params = {
+                page: pagination.value.currentPage,
+                ...(filters.value.status && { status: filters.value.status }),
+            }
+
+            const response = await getApplications(params)
             applications.value = response.data.data
+            pagination.value = {
+                currentPage: response.data.meta.current_page,
+                lastPage: response.data.meta.last_page,
+                total: response.data.meta.total,
+                perPage: response.data.meta.per_page,
+            }
         } catch(err) {
             console.error(err)
         } finally {
@@ -67,6 +87,8 @@ export const useApplicationStore = defineStore('applications', () => {
         applications,
         loading,
         error,
+        filters,
+        pagination,
         fetchApplications,
         getApplicationById,
         createApplication,
