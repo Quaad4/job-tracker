@@ -17,6 +17,17 @@ export const useApplicationStore = defineStore('applications', () => {
         perPage: 10,
     })
 
+    const setPage = async (page) => {
+        pagination.value.currentPage = page
+        fetchApplications()
+    }
+
+    const setFilter = (filter) => {
+        filters.value.status = filter
+        pagination.value.currentPage = 1
+        fetchApplications()
+    }
+
     const fetchApplications = async () => {
 
         loading.value = true
@@ -89,6 +100,8 @@ export const useApplicationStore = defineStore('applications', () => {
         error,
         filters,
         pagination,
+        setPage,
+        setFilter,
         fetchApplications,
         getApplicationById,
         createApplication,
