@@ -6,13 +6,20 @@ use App\Http\Requests\StoreApplicationRequest;
 use App\Http\Requests\UpdateApplicationRequest;
 use App\Http\Resources\ApplicationResource;
 use App\Models\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 class ApplicationController extends Controller
 {
     //
-    public function index() 
+    public function index(Request $request) 
     {
-        return ApplicationResource::collection(Application::all());
+        $query = Application::query();
+
+        if($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        return ApplicationResource::collection($query->paginate(10));
     }
 
     public function store(StoreApplicationRequest $request) 

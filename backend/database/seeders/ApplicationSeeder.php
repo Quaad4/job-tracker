@@ -16,6 +16,6 @@ class ApplicationSeeder extends Seeder
     {
         $user = User::factory()->create();
 
-        Application::factory()->count(10)->create(['user_id' => $user->id]);
+        Application::factory()->count(50)->create(['user_id' => $user->id]);
     }
 }
