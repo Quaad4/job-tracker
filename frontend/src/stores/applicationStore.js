@@ -17,7 +17,7 @@ export const useApplicationStore = defineStore('applications', () => {
         perPage: 10,
     })
 
-    const setPage = async (page) => {
+    const setPage = (page) => {
         pagination.value.currentPage = page
         fetchApplications()
     }
