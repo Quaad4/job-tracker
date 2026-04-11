@@ -19,7 +19,7 @@ class ApplicationController extends Controller
             $query->where('status', $request->status);
         }
 
-        return ApplicationResource::collection($query->paginate(10));
+        return ApplicationResource::collection($query->paginate(12));
     }
 
     public function store(StoreApplicationRequest $request) 
