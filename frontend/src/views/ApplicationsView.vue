@@ -1,5 +1,7 @@
 <template>
-    <div class="bg-blue-100 min-h-screen">        
+    <div class="bg-blue-100 min-h-screen"> 
+        
+        <ApplicationModal />
 
         <!-- Header and Add applications button -->
         <header class="bg-white shadow-sm">
@@ -93,6 +95,7 @@
 
 import { onMounted } from 'vue';
 import { useApplicationStore } from '@/stores/applicationStore';
+import ApplicationModal from '../components/ApplicationModal.vue'
 
 const store = useApplicationStore()
 
