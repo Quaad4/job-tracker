@@ -55,8 +55,8 @@ export const useApplicationStore = defineStore('applications', () => {
     const createApplication = async (application) => {
         loading.value = true
         try {
-            const response = await storeApplication(application)
-            applications.value.push(response.data)
+            await storeApplication(application)
+            await fetchApplications()
         } catch (err) {
             console.error(err)
         } finally {
@@ -82,7 +82,7 @@ export const useApplicationStore = defineStore('applications', () => {
         loading.value = true
         try {
             await destroyApplication(id)
-            applications.value = applications.value.filter(app => app.id !== id)
+            await fetchApplications()
         } catch (err) {
             console.error(err)
         } finally {

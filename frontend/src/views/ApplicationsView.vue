@@ -1,11 +1,13 @@
 <template>
-    <div class="bg-blue-100 min-h-screen">        
+    <div class="bg-blue-100 min-h-screen"> 
+        
+        <ApplicationModal ref="modal"/>
 
         <!-- Header and Add applications button -->
         <header class="bg-white shadow-sm">
             <div class="max-w-7xl mx-auto px-4 py-5 flex justify-between items-center">
                 <h1 class="text-2x1 font-bold text-gray-800">🗂 Job Tracker</h1>
-                <button class="bg-blue-600 hover:bg-blue-709 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer">+ Add Application</button>
+                <button @click="modal.openCreate()" class="bg-blue-600 hover:bg-blue-709 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer">+ Add Application</button>
             </div>
         </header>
 
@@ -31,6 +33,7 @@
                     v-for="application in store.applications"
                     :key="application.id"
                     class="bg-white rounded-lg shadow-sm p-6 cursor-pointer hover:shadow-md transition-shadow"
+                    @click="modal.openEdit(application)"
                 >
                     <h2 class="font-semibold text-gray-800 text-lg">{{ application.company }}</h2>
                     <p class="text-gray-500 text-sm mt-1">{{ application.role }}</p>
@@ -91,10 +94,12 @@
 
 <script setup>
 
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useApplicationStore } from '@/stores/applicationStore';
+import ApplicationModal from '../components/ApplicationModal.vue'
 
 const store = useApplicationStore()
+const modal = ref(null)  
 
 onMounted(() => {
     store.fetchApplications()
