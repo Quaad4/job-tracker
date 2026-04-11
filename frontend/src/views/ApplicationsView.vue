@@ -1,6 +1,7 @@
 <template>
     <div class="bg-blue-100 min-h-screen">        
 
+        <!-- Header and Add applications button -->
         <header class="bg-white shadow-sm">
             <div class="max-w-7xl mx-auto px-4 py-5 flex justify-between items-center">
                 <h1 class="text-2x1 font-bold text-gray-800">🗂 Job Tracker</h1>
@@ -9,7 +10,8 @@
         </header>
 
         <main class="max-w-7xl mx-auto px-4 py-8">
-            
+
+            <!-- Filters -->
             <div class="flex gap-2 mb-6">
                 <button @click="store.setFilter(null)" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer" :class="store.filters.status === null ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'">All</button>
                 <button @click="store.setFilter('applied')"  class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer" :class="store.filters.status === 'applied' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'">Applied</button>
@@ -32,6 +34,7 @@
                 >
                     <h2 class="font-semibold text-gray-800 text-lg">{{ application.company }}</h2>
                     <p class="text-gray-500 text-sm mt-1">{{ application.role }}</p>
+                    
                     <div class="mt-4 flex justify-between items-center">
                         <span class="text-xs text-gray-400">{{ application.date_applied }}</span>
                         <span 
