@@ -51,8 +51,40 @@
                     </div>
                 </div>
             </div>
-        </main>
+            
+            <!-- Empty state -->
+            <div 
+                v-if="!store.loading && store.applications.length === 0"
 
+                class="text-center py-12"
+            >
+                <p class="text-gray-500 text-lg">No applications found</p>
+                <p class="text-gray-400 text-sm mt-2">Try a different filter or add a new application</p>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="mt-8 flex justify-center items-center gap-4">
+                <button
+                    :disabled="store.pagination.currentPage === 1"
+                    @click="store.setPage(store.pagination.currentPage - 1)"
+                    class="px-4 py-2 rounded-lg bg-white shadow-sm text-sm text-gray-600 cursor-pointer hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    ← Previous
+                </button>
+                <span class="text-sm text-gray-600">
+                    Page {{ store.pagination.currentPage }} of {{ store.pagination.lastPage }}
+                </span>
+                <button
+                    :disabled="store.pagination.currentPage === store.pagination.lastPage"
+                    @click="store.setPage(store.pagination.currentPage + 1)"
+                    class="px-4 py-2 rounded-lg bg-white shadow-sm text-sm text-gray-600 cursor-pointer hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    Next →
+                </button>
+            </div>
+
+
+        </main>
 
     </div>    
 </template>
