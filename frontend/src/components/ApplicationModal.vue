@@ -77,6 +77,14 @@
 
                 <div class="flex justify-end gap-3 mt-4">
                     <button
+                        v-if="isEditing"
+                        type="button"
+                        @click.stop="deleteApplication"
+                        class="px-4 py-2 rounded-lg text-sm font-medium text-white bg-red-500 hover:bg-red-600 cursor-pointer transition-colors"
+                    >
+                        Delete
+                    </button>
+                    <button
                         type="button"
                         @click="close"
                         class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 bg-white border border-gray-300 hover:bg-gray-50 cursor-pointer transition-colors"
@@ -145,9 +153,16 @@
         isOpen.value = true
     }
 
+    const deleteApplication = async () => {
+        await store.deleteApplication(editingId.value)
+        close()
+    }
+
     // Close modal
     const close = () => {
         isOpen.value = false
+        isEditing.value = false
+        editingId.value = null
     }
 
     const handleSubmit = async () => {
