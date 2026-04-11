@@ -96,11 +96,15 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+    import { ref, reactive } from 'vue'
+    import { useApplicationStore } from '@/stores/applicationStore'
+
+    const store = useApplicationStore()
 
     // Modal visibility and mode
-    const isOpen = ref(true)
+    const isOpen = ref(false)
     const isEditing = ref(false)
+    const editingId = ref(null)
 
     // data
     const form = reactive({
@@ -129,6 +133,7 @@ import { ref, reactive } from 'vue'
     // Open modal in edit mode
     const openEdit = (application) => {
         isEditing.value = true
+        editingId.value = application.id
         Object.assign(form, {
             company: application.company,
             role: application.role,
@@ -143,6 +148,15 @@ import { ref, reactive } from 'vue'
     // Close modal
     const close = () => {
         isOpen.value = false
+    }
+
+    const handleSubmit = async () => {
+        if(isEditing.value) {
+            await store.editApplication(editingId.value, form)
+        } else {
+            await store.createApplication(form)
+        }
+        close()
     }
 
     // Expose openCreate and openEdit so ApplicationsView can trigger them
