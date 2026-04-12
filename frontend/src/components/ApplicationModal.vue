@@ -23,8 +23,12 @@
                         v-model="form.company"
                         type="text"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        :class="errors.company ? 'border-red-500' : 'border-gray-300'"
                         placeholder="Google"
                     />
+                    <p v-if="errors.company" class="text-red-500 text-xs mt-1">
+                        {{ errors.company[0] }}
+                    </p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
@@ -32,20 +36,28 @@
                         v-model="form.role"
                         type="text"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        :class="errors.role ? 'border-red-500' : 'border-gray-300'"
                         placeholder="Manager"
                     />
+                    <p v-if="errors.role" class="text-red-500 text-xs mt-1">
+                        {{ errors.role[0] }}
+                    </p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                     <select
                         v-model="form.status"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        :class="errors.status ? 'border-red-500' : 'border-gray-300'"
                     >
                         <option value="applied">Applied</option>
                         <option value="interview">Interview</option>
                         <option value="offer">Offer</option>
                         <option value="rejected">Rejected</option>
                     </select>
+                    <p v-if="errors.status" class="text-red-500 text-xs mt-1">
+                        {{ errors.status[0] }}
+                    </p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Date Applied</label>
@@ -53,7 +65,11 @@
                         v-model="form.date_applied"
                         type="date"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        :class="errors.date_applied ? 'border-red-500' : 'border-gray-300'"
                     />
+                    <p v-if="errors.date_applied" class="text-red-500 text-xs mt-1">
+                        {{ errors.date_applied[0] }}
+                    </p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Salary (min)</label>
@@ -61,18 +77,26 @@
                         v-model="form.salary_min"
                         type="number" 
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        :class="errors.salary_min ? 'border-red-500' : 'border-gray-300'"
                         placeholder="38000"
                     />
+                    <p v-if="errors.salary_min" class="text-red-500 text-xs mt-1">
+                        {{ errors.salary_min[0] }}
+                    </p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
                     <textarea
                         v-model="form.notes"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        :class="errors.notes ? 'border-red-500' : 'border-gray-300'"
                         placeholder="Applied via LinkedIn"
                         rows="3"
                     >
                     </textarea>
+                    <p v-if="errors.notes" class="text-red-500 text-xs mt-1">
+                        {{ errors.notes[0] }}
+                    </p>
                 </div>
 
                 <div class="flex justify-end gap-3 mt-4">
@@ -113,6 +137,7 @@
     const isOpen = ref(false)
     const isEditing = ref(false)
     const editingId = ref(null)
+    const errors = ref({})
 
     // data
     const form = reactive({
@@ -166,12 +191,19 @@
     }
 
     const handleSubmit = async () => {
-        if(isEditing.value) {
-            await store.editApplication(editingId.value, form)
-        } else {
-            await store.createApplication(form)
+        errors.value = {}
+        try {
+            if(isEditing.value) {
+                await store.editApplication(editingId.value, form)
+            } else {
+                await store.createApplication(form)
+            }
+            close()
+        } catch(err) {
+            if(err.response?.status === 422) {
+                errors.value = err.response.data.errors
+            }
         }
-        close()
     }
 
     // Expose openCreate and openEdit so ApplicationsView can trigger them

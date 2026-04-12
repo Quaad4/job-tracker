@@ -59,6 +59,7 @@ export const useApplicationStore = defineStore('applications', () => {
             await fetchApplications()
         } catch (err) {
             console.error(err)
+            throw err
         } finally {
             loading.value = false
         }
@@ -73,6 +74,7 @@ export const useApplicationStore = defineStore('applications', () => {
             })
         } catch (err) {
             console.log(err)
+            throw err
         } finally {
             loading.value = false
         }
