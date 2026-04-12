@@ -6,7 +6,6 @@ export const useApplicationStore = defineStore('applications', () => {
 
     const applications = ref([])
     const loading = ref(false)
-    const error = ref(null)
     const filters = ref({
         status: null,
     })
@@ -99,7 +98,6 @@ export const useApplicationStore = defineStore('applications', () => {
     return {
         applications,
         loading,
-        error,
         filters,
         pagination,
         setPage,
