@@ -98,7 +98,6 @@ export const useApplicationStore = defineStore('applications', () => {
     return {
         applications,
         loading,
-        error,
         filters,
         pagination,
         setPage,
