@@ -1,4 +1,8 @@
+# Job Tracker https://job-tracker-vert-sigma.vercel.app/
+
 # Job Tracker
+
+🌐 **Live Demo:** https://job-tracker-vert-sigma.vercel.app/
 
 A full-stack job application tracking tool built with Laravel and Vue.js.
 Helps developers and job seekers manage and monitor their job applications
