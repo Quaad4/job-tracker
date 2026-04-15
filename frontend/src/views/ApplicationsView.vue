@@ -13,6 +13,16 @@
 
         <main class="max-w-7xl mx-auto px-4 py-8">
 
+            <!-- Feedback -->
+            <div class="mb-2 p-2">
+                <p  
+                    class="text-md font-medium text-green-500"
+                    v-if="store.feedback.length"
+                >
+                    {{ store.feedback }}
+                </p>
+            </div>
+
             <!-- Filters -->
             <div class="flex gap-2 mb-6">
                 <button @click="store.setFilter(null)" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer" :class="store.filters.status === null ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'">All</button>

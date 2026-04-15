@@ -15,6 +15,7 @@ export const useApplicationStore = defineStore('applications', () => {
         total: 0,
         perPage: 10,
     })
+    const feedback = ref('')
 
     const setPage = (page) => {
         pagination.value.currentPage = page
@@ -53,9 +54,11 @@ export const useApplicationStore = defineStore('applications', () => {
 
     const createApplication = async (application) => {
         loading.value = true
+        feedback.value = ''
         try {
             await storeApplication(application)
             await fetchApplications()
+            feedback.value = "Application created successfully"
         } catch (err) {
             console.error(err)
             throw err
@@ -66,11 +69,13 @@ export const useApplicationStore = defineStore('applications', () => {
 
     const editApplication = async (id, data) => {
         loading.value = true
+        feedback.value = ''
         try{
             const response = await updateApplication(id, data)
             applications.value = applications.value.map(app => {
                 return app.id === id ? response.data : app
             })
+            feedback.value = "Application updated successfully"
         } catch (err) {
             console.log(err)
             throw err
@@ -81,9 +86,11 @@ export const useApplicationStore = defineStore('applications', () => {
 
     const deleteApplication = async (id) => {
         loading.value = true
+        feedback.value = ''
         try {
             await destroyApplication(id)
             await fetchApplications()
+            feedback.value = "Application deleted successfully"
         } catch (err) {
             console.error(err)
         } finally {
@@ -100,6 +107,7 @@ export const useApplicationStore = defineStore('applications', () => {
         loading,
         filters,
         pagination,
+        feedback,
         setPage,
         setFilter,
         fetchApplications,
