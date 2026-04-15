@@ -15,6 +15,18 @@ export const useApplicationStore = defineStore('applications', () => {
         total: 0,
         perPage: 10,
     })
+    const feedback = ref('')
+    const feedbackType = ref('') // 'success' or 'error'
+
+    //Temp feedback flash
+    const setFeedback = (message, type='success') => {
+        feedbackType.value = type
+        feedback.value = message
+        setTimeout(() => {
+            feedback.value = ''
+            feedbackType.value = ''
+        }, 5000)
+    }
 
     const setPage = (page) => {
         pagination.value.currentPage = page
@@ -53,11 +65,14 @@ export const useApplicationStore = defineStore('applications', () => {
 
     const createApplication = async (application) => {
         loading.value = true
+        feedback.value = ''
         try {
             await storeApplication(application)
             await fetchApplications()
+            setFeedback("Application created successfully")
         } catch (err) {
             console.error(err)
+            setFeedback("Something went wrong — please try again", "error")
             throw err
         } finally {
             loading.value = false
@@ -66,13 +81,16 @@ export const useApplicationStore = defineStore('applications', () => {
 
     const editApplication = async (id, data) => {
         loading.value = true
+        feedback.value = ''
         try{
             const response = await updateApplication(id, data)
             applications.value = applications.value.map(app => {
                 return app.id === id ? response.data : app
             })
+            setFeedback("Application updated successfully")
         } catch (err) {
             console.log(err)
+            setFeedback("Something went wrong — please try again", "error")
             throw err
         } finally {
             loading.value = false
@@ -81,11 +99,14 @@ export const useApplicationStore = defineStore('applications', () => {
 
     const deleteApplication = async (id) => {
         loading.value = true
+        feedback.value = ''
         try {
             await destroyApplication(id)
             await fetchApplications()
+            setFeedback("Application deleted successfully")
         } catch (err) {
             console.error(err)
+            setFeedback("Something went wrong — please try again", "error")
         } finally {
             loading.value = false
         }
@@ -100,6 +121,8 @@ export const useApplicationStore = defineStore('applications', () => {
         loading,
         filters,
         pagination,
+        feedback,
+        feedbackType,
         setPage,
         setFilter,
         fetchApplications,
