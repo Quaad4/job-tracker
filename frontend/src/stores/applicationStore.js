@@ -16,6 +16,17 @@ export const useApplicationStore = defineStore('applications', () => {
         perPage: 10,
     })
     const feedback = ref('')
+    const feedbackType = ref('') // 'success' or 'error'
+
+    //Temp feedback flash
+    const setFeedback = (message, type='success') => {
+        feedbackType.value = type
+        feedback.value = message
+        setTimeout(() => {
+            feedback.value = ''
+            feedbackType.value = ''
+        }, 5000)
+    }
 
     const setPage = (page) => {
         pagination.value.currentPage = page
@@ -58,9 +69,10 @@ export const useApplicationStore = defineStore('applications', () => {
         try {
             await storeApplication(application)
             await fetchApplications()
-            feedback.value = "Application created successfully"
+            setFeedback("Application created successfully")
         } catch (err) {
             console.error(err)
+            setFeedback("Something went wrong — please try again", "error")
             throw err
         } finally {
             loading.value = false
@@ -75,9 +87,10 @@ export const useApplicationStore = defineStore('applications', () => {
             applications.value = applications.value.map(app => {
                 return app.id === id ? response.data : app
             })
-            feedback.value = "Application updated successfully"
+            setFeedback("Application updated successfully")
         } catch (err) {
             console.log(err)
+            setFeedback("Something went wrong — please try again", "error")
             throw err
         } finally {
             loading.value = false
@@ -90,9 +103,10 @@ export const useApplicationStore = defineStore('applications', () => {
         try {
             await destroyApplication(id)
             await fetchApplications()
-            feedback.value = "Application deleted successfully"
+            setFeedback("Application deleted successfully")
         } catch (err) {
             console.error(err)
+            setFeedback("Something went wrong — please try again", "error")
         } finally {
             loading.value = false
         }
@@ -108,6 +122,7 @@ export const useApplicationStore = defineStore('applications', () => {
         filters,
         pagination,
         feedback,
+        feedbackType,
         setPage,
         setFilter,
         fetchApplications,

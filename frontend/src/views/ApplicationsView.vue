@@ -16,7 +16,8 @@
             <!-- Feedback -->
             <div class="mb-2 p-2">
                 <p  
-                    class="text-md font-medium text-green-500"
+                    class="text-md font-medium"
+                    :class="store.feedbackType === 'success' ? 'text-green-500' : 'text-red-500'"
                     v-if="store.feedback.length"
                 >
                     {{ store.feedback }}
