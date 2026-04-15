@@ -19,7 +19,7 @@ class ApplicationResource extends JsonResource
             'company' => $this->company,
             'role' => $this->role,
             'status' => $this->status,
-            'date_applied' => $this->date_applied->format('d-m-Y'),
+            'date_applied' => $this->date_applied->format('Y-m-d'),
             'notes' => $this->notes,
             'salary_min' => $this->salary_min,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
