@@ -33,12 +33,14 @@ export const useApplicationStore = defineStore('applications', () => {
         fetchApplications()
     }
 
+    // Reset to page 1 — filter changes the dataset size so current page may no longer exist
     const setFilter = (filter) => {
         filters.value.status = filter
         pagination.value.currentPage = 1
         fetchApplications()
     }
 
+    // Only include status if active — prevents empty ?status= being sent to the API
     const fetchApplications = async () => {
 
         loading.value = true
@@ -63,6 +65,7 @@ export const useApplicationStore = defineStore('applications', () => {
         }
     }
 
+    // Rethrow so ApplicationModal can catch 422 errors and display field-level validation messages
     const createApplication = async (application) => {
         loading.value = true
         feedback.value = ''
@@ -79,6 +82,7 @@ export const useApplicationStore = defineStore('applications', () => {
         }
     }
 
+    // Local update only — editing doesn't affect pagination, avoids unnecessary API call
     const editApplication = async (id, data) => {
         loading.value = true
         feedback.value = ''
@@ -112,6 +116,7 @@ export const useApplicationStore = defineStore('applications', () => {
         }
     }
 
+    // Find locally — data already loaded in store
     const getApplicationById = (id) => {
         return applications.value.find(app => app.id === id)
     }
