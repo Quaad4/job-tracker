@@ -156,4 +156,18 @@ class ApplicationControllerTest extends TestCase
         $response->assertStatus(204);
         $this->assertDatabaseMissing('applications', ['id' => $application->id, 'user_id' => $this->user->id]);
     }
+
+    /**
+     * test user relationship on application model
+     */
+    public function test_user_relationship_on_application_model(): void
+    {
+        $user = User::factory()->create();
+        $application = Application::factory()->create(['user_id' => $user->id]);
+
+        $relatedUser = $application->user;
+
+        $this->assertInstanceOf(User::class, $relatedUser);
+        $this->assertEquals($user->id, $relatedUser->id);
+    }
 }
