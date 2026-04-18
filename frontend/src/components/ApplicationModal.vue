@@ -190,6 +190,7 @@
         editingId.value = null
     }
 
+    //handle both edit and create requests
     const handleSubmit = async () => {
         errors.value = {}
         try {
