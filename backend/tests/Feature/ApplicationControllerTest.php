@@ -160,7 +160,7 @@ class ApplicationControllerTest extends TestCase
     /**
      * test user relationship on application model
      */
-    public function test_user_relationship_on_application_model(): void
+    public function test_application_user_relationship_returns_user_model(): void
     {
         $user = User::factory()->create();
         $application = Application::factory()->create(['user_id' => $user->id]);
