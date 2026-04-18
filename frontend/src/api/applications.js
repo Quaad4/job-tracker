@@ -1,11 +1,11 @@
 import apiClient from './axios'
 
+// status is only included when active — prevents empty ?status= in URL
 export const getApplications = (params = {}) => {
     return apiClient.get('/applications', { params })
 }
 
-// Available for direct API fetching if needed
-// Currently handled locally via getApplicationById in the store
+// Available for direct fetching if needed — currently resolved locally via store
 export const showApplication = (id) => {
     return apiClient.get(`/applications/${id}`)
 }
