@@ -112,6 +112,7 @@ import ApplicationModal from '../components/ApplicationModal.vue'
 const store = useApplicationStore()
 const modal = ref(null)  
 
+// Fetch paginated applications on page load
 onMounted(() => {
     store.fetchApplications()
 })
