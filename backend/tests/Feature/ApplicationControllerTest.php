@@ -46,10 +46,23 @@ class ApplicationControllerTest extends TestCase
         Application::factory()->count(3)->create(['user_id' => $this->user->id, 'status' => 'offer']);
         Application::factory()->count(3)->create(['user_id' => $this->user->id, 'status' => 'rejected']);
 
+        $applied = $this->getJson('/api/applications?status=applied');
         $interviewed = $this->getJson('/api/applications?status=interview');
+        $offered = $this->getJson('/api/applications?status=offer');
+        $rejected = $this->getJson('/api/applications?status=rejected');
+
+
+        $applied->assertStatus(200);
+        $applied->assertJsonCount(3, 'data');
 
         $interviewed->assertStatus(200);
         $interviewed->assertJsonCount(3, 'data');
+
+        $offered->assertStatus(200);
+        $offered->assertJsonCount(3, 'data');
+
+        $rejected->assertStatus(200);
+        $rejected->assertJsonCount(3, 'data');
     }
 
     /**
