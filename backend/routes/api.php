@@ -11,3 +11,4 @@ Route::put('/applications/{application}', [ApplicationController::class, 'update
 Route::delete('/applications/{application}', [ApplicationController::class, 'destroy']);
 
 Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/login', [AuthController::class, 'login']);
