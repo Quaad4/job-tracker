@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginAuthRequest;
 use App\Http\Requests\RegisterAuthRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +17,7 @@ class AuthController extends Controller
         $data['password'] = Hash::make($data['password']);
         $user = User::create($data);
         $token = $user->createToken('auth_token')->plainTextToken;
-        return response()->json([ 'token' => $token, 'user' => $user, 'message' => 'User registered successfully'], 201);
+        return response()->json([ 'token' => $token, 'user' => new UserResource($user), 'message' => 'User registered successfully'], 201);
     }
 
     public function login(LoginAuthRequest $request) 
@@ -30,7 +31,7 @@ class AuthController extends Controller
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;
-        return response()->json([ 'token' => $token, 'user' => $user, 'message' => 'User logged in successfully'], 200);
+        return response()->json([ 'token' => $token, 'user' => new UserResource($user), 'message' => 'User logged in successfully'], 200);
     }
 
     public function logout(Request $request) 
