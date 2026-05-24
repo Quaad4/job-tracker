@@ -13,6 +13,12 @@
 
         <main class="max-w-7xl mx-auto px-4 py-8">
 
+            <div>
+                <span class="text-gray-500 text-sm mb-1">Welcome back, {{ authStore.user ? authStore.user.name : 'Guest' }}!</span>
+            </div>
+
+            <RouterLink v-if="!authStore.isAuthenticated" to="/login" class="text-blue-600 hover:text-blue-800">Login</RouterLink>
+
             <!-- Feedback -->
             <div class="mb-2 p-2">
                 <p  
@@ -107,9 +113,11 @@
 
 import { onMounted, ref } from 'vue';
 import { useApplicationStore } from '@/stores/applicationStore';
+import { useAuthStore } from '@/stores/authStore';
 import ApplicationModal from '../components/ApplicationModal.vue'
 
 const applicationStore = useApplicationStore()
+const authStore = useAuthStore()
 const modal = ref(null)  
 
 // Fetch paginated applications on page load
