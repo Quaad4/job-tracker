@@ -5,7 +5,7 @@ import { authLogin } from '../api/auth'
 export const useAuthStore = defineStore('auth', () => {
 
     // state
-    const user = ref(null)
+    const user = ref(JSON.parse(localStorage.getItem('user')) || null)
     const token = ref(localStorage.getItem('token') || null)
 
     // computed
@@ -17,6 +17,7 @@ export const useAuthStore = defineStore('auth', () => {
             token.value = response.data.token
             user.value = response.data.user
             localStorage.setItem('token', token.value)
+            localStorage.setItem('user', JSON.stringify(response.data.user)) 
         } catch (error) {
             console.error('Login failed:', error)
             throw error // LoginView can catch it
