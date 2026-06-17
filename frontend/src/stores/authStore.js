@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { authLogin, authRegister } from '../api/auth'
+import { authLogin, authRegister, authLogout } from '../api/auth'
 
 export const useAuthStore = defineStore('auth', () => {
 
@@ -37,11 +37,25 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-        return {
+    const logout = async () => {
+        try {
+            await authLogout()
+        } catch (error) {
+            console.error('Logout failed:', error)
+        } finally {
+            token.value = null
+            user.value = null
+            localStorage.removeItem('token')
+            localStorage.removeItem('user')
+        }
+    }
+
+    return {
         user,
         token,
         isAuthenticated,
         login,
         register,
+        logout
     }
 })

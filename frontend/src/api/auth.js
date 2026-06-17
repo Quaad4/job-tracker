@@ -7,3 +7,7 @@ export const authLogin = (credentials) => {
 export const authRegister = (userData) => {
     return apiClient.post('auth/register', userData)
 }
+
+export const authLogout = () => {
+    return apiClient.post('auth/logout')
+}
