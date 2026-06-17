@@ -8,40 +8,47 @@
             <div class="max-w-7xl mx-auto px-4 py-5 flex justify-between items-center">
                 <h1 class="text-2x1 font-bold text-gray-800">🗂 Job Tracker</h1>
                 <button @click="modal.openCreate()" class="bg-blue-600 hover:bg-blue-709 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer">+ Add Application</button>
+                <button @click="authStore.logout()" class="bg-blue-600 hover:bg-blue-709 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer">Logout</button>
             </div>
         </header>
 
         <main class="max-w-7xl mx-auto px-4 py-8">
 
+            <div>
+                <span class="text-gray-500 text-sm mb-1">Welcome back, {{ authStore.user ? authStore.user.name : 'Guest' }}!</span>
+            </div>
+
+            <RouterLink v-if="!authStore.isAuthenticated" to="/login" class="text-blue-600 hover:text-blue-800">Login</RouterLink>
+
             <!-- Feedback -->
             <div class="mb-2 p-2">
                 <p  
                     class="text-md font-medium"
-                    :class="store.feedbackType === 'success' ? 'text-green-500' : 'text-red-500'"
-                    v-if="store.feedback.length"
+                    :class="applicationStore.feedbackType === 'success' ? 'text-green-500' : 'text-red-500'"
+                    v-if="applicationStore.feedback.length"
                 >
-                    {{ store.feedback }}
+                    {{ applicationStore.feedback }}
                 </p>
             </div>
 
             <!-- Filters -->
             <div class="flex gap-2 mb-6">
-                <button @click="store.setFilter(null)" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer" :class="store.filters.status === null ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'">All</button>
-                <button @click="store.setFilter('applied')"  class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer" :class="store.filters.status === 'applied' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'">Applied</button>
-                <button @click="store.setFilter('interview')" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer" :class="store.filters.status === 'interview' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'">Interview</button>
-                <button @click="store.setFilter('offer')" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer" :class="store.filters.status === 'offer' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'">Offer</button>
-                <button @click="store.setFilter('rejected')" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer" :class="store.filters.status === 'rejected' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'">Rejected</button>
+                <button @click="applicationStore.setFilter(null)" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer" :class="applicationStore.filters.status === null ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'">All</button>
+                <button @click="applicationStore.setFilter('applied')"  class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer" :class="applicationStore.filters.status === 'applied' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'">Applied</button>
+                <button @click="applicationStore.setFilter('interview')" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer" :class="applicationStore.filters.status === 'interview' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'">Interview</button>
+                <button @click="applicationStore.setFilter('offer')" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer" :class="applicationStore.filters.status === 'offer' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'">Offer</button>
+                <button @click="applicationStore.setFilter('rejected')" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer" :class="applicationStore.filters.status === 'rejected' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'">Rejected</button>
             </div>
 
             <!-- Loading state -->
-            <div v-if="store.loading" class="text-center py-12 text-gray-500">
+            <div v-if="applicationStore.loading" class="text-center py-12 text-gray-500">
                 Loading...
             </div>
     
             <!-- Applications grid -->
             <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div 
-                    v-for="application in store.applications"
+                    v-for="application in applicationStore.applications"
                     :key="application.id"
                     class="bg-white rounded-lg shadow-sm p-6 cursor-pointer hover:shadow-md transition-shadow"
                     @click="modal.openEdit(application)"
@@ -68,7 +75,7 @@
             
             <!-- Empty state -->
             <div 
-                v-if="!store.loading && store.applications.length === 0"
+                v-if="!applicationStore.loading && applicationStore.applications.length === 0"
 
                 class="text-center py-12"
             >
@@ -79,18 +86,18 @@
             <!-- Pagination -->
             <div class="mt-8 flex justify-center items-center gap-4">
                 <button
-                    :disabled="store.pagination.currentPage === 1"
-                    @click="store.setPage(store.pagination.currentPage - 1)"
+                    :disabled="applicationStore.pagination.currentPage === 1"
+                    @click="applicationStore.setPage(applicationStore.pagination.currentPage - 1)"
                     class="px-4 py-2 rounded-lg bg-white shadow-sm text-sm text-gray-600 cursor-pointer hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     ← Previous
                 </button>
                 <span class="text-sm text-gray-600">
-                    Page {{ store.pagination.currentPage }} of {{ store.pagination.lastPage }}
+                    Page {{ applicationStore.pagination.currentPage }} of {{ applicationStore.pagination.lastPage }}
                 </span>
                 <button
-                    :disabled="store.pagination.currentPage === store.pagination.lastPage"
-                    @click="store.setPage(store.pagination.currentPage + 1)"
+                    :disabled="applicationStore.pagination.currentPage === applicationStore.pagination.lastPage"
+                    @click="applicationStore.setPage(applicationStore.pagination.currentPage + 1)"
                     class="px-4 py-2 rounded-lg bg-white shadow-sm text-sm text-gray-600 cursor-pointer hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Next →
@@ -107,14 +114,16 @@
 
 import { onMounted, ref } from 'vue';
 import { useApplicationStore } from '@/stores/applicationStore';
+import { useAuthStore } from '@/stores/authStore';
 import ApplicationModal from '../components/ApplicationModal.vue'
 
-const store = useApplicationStore()
+const applicationStore = useApplicationStore()
+const authStore = useAuthStore()
 const modal = ref(null)  
 
 // Fetch paginated applications on page load
 onMounted(() => {
-    store.fetchApplications()
+    applicationStore.fetchApplications()
 })
 
 </script>
