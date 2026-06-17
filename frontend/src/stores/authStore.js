@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { authLogin } from '../api/auth'
+import { authLogin, authRegister } from '../api/auth'
 
 export const useAuthStore = defineStore('auth', () => {
 
@@ -24,10 +24,24 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    return {
+    const register = async (userData) => {
+        try {
+            const response = await authRegister(userData)
+            token.value = response.data.token
+            user.value = response.data.user
+            localStorage.setItem('token', token.value)
+            localStorage.setItem('user', JSON.stringify(response.data.user))
+        } catch (error) {
+            console.error('Registration failed:', error)
+            throw error // RegisterView can catch it
+        }
+    }
+
+        return {
         user,
         token,
         isAuthenticated,
         login,
+        register,
     }
 })
