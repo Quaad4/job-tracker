@@ -20,14 +20,16 @@ apiClient.interceptors.request.use((config) => {
 
 // Handle expired or invalid tokens globally
 apiClient.interceptors.response.use(
-    // Success — just return the response as normal
     (response) => response,
-    // Error — check if token is invalid/expired
     (error) => {
         if (error.response?.status === 401) {
-            // Clear invalid token and redirect to login
-            localStorage.removeItem('token')
-            window.location.href = '/login'
+            // Don't redirect on auth routes — let the component handle it
+            const isAuthRoute = error.config.url.includes('auth/')
+            if (!isAuthRoute) {
+                localStorage.removeItem('token')
+                localStorage.removeItem('user')
+                window.location.href = '/login'
+            }
         }
         return Promise.reject(error)
     }
