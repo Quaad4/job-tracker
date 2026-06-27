@@ -12,7 +12,7 @@ class ApplicationControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    private User $user;
+    protected User $user;
 
     protected function setUp(): void
     {
@@ -20,6 +20,7 @@ class ApplicationControllerTest extends TestCase
 
         // Create a user for all tests
         $this->user = User::factory()->create();
+        $this->actingAs($this->user);
     }
 
     /**
